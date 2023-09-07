@@ -5,6 +5,18 @@ ifeq ($(call is-vendor-board-platform,QCOM),true)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE_RELATIVE_PATH := hw
+LOCAL_SHARED_LIBRARIES := liblog libcutils libdl libxml2 libbase libutils libbinder_ndk
+# KEYSTONE(I1132378f14428bf511f3cea4f419e90a6e89f823,b/181709127)
+LOCAL_SHARED_LIBRARIES := liblog libcutils libdl libxml2 libbase libutils libbinder_ndk
+
+ifeq ($(call math_gt_or_eq, 33, $(PLATFORM_SDK_VERSION)), true)
+    LOCAL_SHARED_LIBRARIES += android.hardware.power-V3-ndk
+endif
+ifeq ($(call math_gt_or_eq, 34, $(PLATFORM_SDK_VERSION)), true)
+    LOCAL_SHARED_LIBRARIES += android.hardware.power-V4-ndk
+else
+    LOCAL_SHARED_LIBRARIES += android.hardware.power-V1-ndk_platform
+endif
 
 LOCAL_SHARED_LIBRARIES := \
     liblog \
@@ -88,7 +100,10 @@ LOCAL_INIT_RC := android.hardware.power-service-qti.rc
 LOCAL_MODULE_TAGS := optional
 LOCAL_CFLAGS += -Wno-unused-parameter -Wno-unused-variable
 LOCAL_VENDOR_MODULE := true
+ifeq ($(PLATFORM_SDK_VERSION), 34)
+LOCAL_VINTF_FRAGMENTS := /vintf/sdk34/power.xml
+else
 LOCAL_VINTF_FRAGMENTS := power.xml
-
+endif
 include $(BUILD_EXECUTABLE)
 endif

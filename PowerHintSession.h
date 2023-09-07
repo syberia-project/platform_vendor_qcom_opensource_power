@@ -8,6 +8,9 @@
 
 #include <aidl/android/hardware/power/BnPowerHintSession.h>
 #include <aidl/android/hardware/power/WorkDuration.h>
+#if (PLATFORM_SDK_VERSION >= 34)
+#include <aidl/android/hardware/power/SessionHint.h>
+#endif
 
 std::shared_ptr<aidl::android::hardware::power::IPowerHintSession> setPowerHintSession();
 int64_t getSessionPreferredRate();
@@ -20,5 +23,9 @@ class PowerHintSessionImpl : public aidl::android::hardware::power::BnPowerHintS
     ndk::ScopedAStatus pause() override;
     ndk::ScopedAStatus resume() override;
     ndk::ScopedAStatus close() override;
+    #if (PLATFORM_SDK_VERSION >= 34)
+    ndk::ScopedAStatus sendHint(aidl::android::hardware::power::SessionHint hint) override;
+    ndk::ScopedAStatus setThreads(const std::vector<int32_t>& threadIds) override;
+    #endif
 };
 #endif /* __POWERHINTSESSION__ */
