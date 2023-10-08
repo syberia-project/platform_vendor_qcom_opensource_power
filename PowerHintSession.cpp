@@ -33,7 +33,6 @@ ndk::ScopedAStatus PowerHintSessionImpl::resume() {
 ndk::ScopedAStatus PowerHintSessionImpl::close() {
     return ndk::ScopedAStatus::ok();
 }
-#if (PLATFORM_SDK_VERSION >= 34)
 ndk::ScopedAStatus PowerHintSessionImpl::sendHint(aidl::android::hardware::power::SessionHint hint){
         return ndk::ScopedAStatus::ok();
 }
@@ -44,4 +43,3 @@ ndk::ScopedAStatus PowerHintSessionImpl::setThreads(const std::vector<int32_t>& 
     }
     return ndk::ScopedAStatus::ok();
 }
-#endif
